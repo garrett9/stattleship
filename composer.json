@@ -1,0 +1,18 @@
+{
+	"name" : "garrett9/strattleship",
+	"description" : "A PHP package for interacting with Strattleship's API.",
+	"require" : {
+		"guzzlehttp/guzzle" : "6.*"
+	},
+	"authors" : [{
+			"name" : "Garrett",
+			"email" : "garrettshevach@gmail.com"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Garrett9\\Strattleship\\" : "src/"
+		}
+	},
+	"minimum-stability" : "dev"
+}
