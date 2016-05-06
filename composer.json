@@ -1,5 +1,5 @@
 {
-	"name" : "garrett9/strattleship",
+	"name" : "garrett9/stattleship",
 	"description" : "A PHP package for interacting with Strattleship's API.",
 	"require" : {
 		"guzzlehttp/guzzle" : "6.*"
@@ -11,7 +11,7 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"Garrett9\\Strattleship\\" : "src/"
+			"Garrett9\\Stattleship\\" : "src/"
 		}
 	},
 	"minimum-stability" : "dev"
