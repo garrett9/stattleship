@@ -1,45 +1,83 @@
-<?php 
-
+<?php
 namespace Garrett9\Stattleship\Baseball;
 
 use Garrett9\Stattleship\StattleshipClient;
-use Garrett9\Stattleship\Factories\TeamFactory;
-use Garrett9\Stattleship\Factories\PlayerFactory;
 
 /**
  * A client for interacting with the Baseball
- * @author garrett
  *
+ * @author garrettshevach@gmail.com
+ *        
  */
 class BaseballStattleshipClient extends StattleshipClient implements IBaseballStattleshipClient
 {
+
     /**
-     * 
+     *
      * {@inheritDoc}
-     * @see \Garrett9\Strattleship\StrattleshipClient::getTeams()
+     *
+     * @see \Garrett9\Stattleship\StattleshipClient::createTeamFromData()
      */
-    public function getTeams()
+    protected function createTeamFromData(\stdClass $data)
     {
-        $team_factory = new TeamFactory();
-        $teams = [];
-        $data = $this->get('teams');
-        foreach($data->teams as $team)
-            $teams[] = $team_factory->createBaseballTeam($team->id, $team->nickname, $team->location);
-        return $teams;
+        $team = new BaseballTeam();
+        $this->loadTeamData($team, $data->id, $data->nickname, $data->location);
+        return $team;
     }
-    
+
     /**
-     * 
+     *
      * {@inheritDoc}
-     * @see \Garrett9\Strattleship\StrattleshipClient::getPlayers()
+     *
+     * @see \Garrett9\Stattleship\StattleshipClient::createPlayerFromData()
      */
-    public function getPlayers()
+    protected function createPlayerFromData(\stdClass $data)
     {
-        $player_factory = new PlayerFactory();
-        $players = [];
-        $data = $this->get('players');
-        foreach($data->players as $player)
-            $players[] = $player_factory->createBaseballPlayer($player->id, $player->team_id, $player->first_name, $player->last_name, $player->position_abbreviation);
-        return $players;
+        $player = new BaseballPlayer();
+        $this->loadPlayerData($player, $data->id, $data->team_id, $data->first_name, $data->last_name, $data->position_abbreviation);
+        return $player;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Garrett9\Stattleship\StattleshipClient::createGameFromData()
+     */
+    protected function createGameFromData(\stdClass $data, $season)
+    {
+        $game = new BaseballGame();
+        $this->loadGameData($game, $data->id, $data->timestamp, $data->status, $data->home_team_id, $data->away_team_id, $season);
+        return $game;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Garrett9\Stattleship\StattleshipClient::createGameLogFromData()
+     */
+    protected function createGameLogFromData(\stdClass $data)
+    {
+        $game_log = new BaseballGameLog();
+        $this->loadGameLogData($game_log, $data->id, $data->player_id, $data->game_id, $data->team_id, $data->opponent_id);
+        $game_log->setAtBats($data->at_bats)
+            ->setHitByPitch($data->hit_by_pitch)
+            ->setWalks($data->walks)
+            ->setHits($data->hits)
+            ->setDoubles($data->doubles)
+            ->setTriples($data->triples)
+            ->setHomeRuns($data->home_runs)
+            ->setRuns($data->runs)
+            ->setRunsBattedIn($data->runs_batted_in)
+            ->setStolenBases($data->stolen_bases)
+            ->setStrikeouts($data->strikeouts)
+            ->setWins($data->wins)
+            ->setInningsPitched($data->innings_pitched)
+            ->setPitcherEarnedRuns($data->pitcher_earned_runs)
+            ->setPitcherHits($data->pitcher_hits)
+            ->setPitcherStrikeouts($data->pitcher_strikeouts)
+            ->setPitcherWalks($data->pitcher_walks);
+        return $game_log;
     }
 }

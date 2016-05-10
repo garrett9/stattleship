@@ -36,7 +36,7 @@ class StattleshipProvider extends ServiceProvider
     {
         $this->app->bind(IBaseballStattleshipClient::class, function($app) {
             $config = $app->make(Repository::class);
-            return new BaseballStattleshipClient($config->get('strattleship.access_token')); 
+            return new BaseballStattleshipClient($config->get('stattleship.access_token')); 
         });
     }
 }
