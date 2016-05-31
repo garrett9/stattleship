@@ -46,6 +46,13 @@ abstract class Player {
     protected $team_id;
 
     /**
+     * Get the Slug of the Player.
+     * 
+     * @var string
+     */
+    protected $slug;
+    
+    /**
      * Get the ID of the player.
      * 
      * @return string
@@ -154,5 +161,26 @@ abstract class Player {
         $this->team_id = $team_id;
         return $this;
     }
-    
+
+    /**
+     * Get the Slug of the player.
+     * 
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the Slug of the player.
+     * 
+     * @param string $slug
+     * @return \Garrett9\Stattleship\Player
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
 }

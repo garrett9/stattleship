@@ -38,6 +38,13 @@ abstract class Team {
     protected $acrynom;
 
     /**
+     * Set the Slug of the team.
+     * 
+     * @var string
+     */
+    protected $slug;
+    
+    /**
      * Get the ID of the team.
      * 
      * @return string
@@ -100,7 +107,6 @@ abstract class Team {
     public function setLocation($location)
     {
         $this->location = $location;
-        $this->acrynom = strtoupper(substr($this->location, 0, 3));
         return $this;
     }
     
@@ -112,5 +118,28 @@ abstract class Team {
     public function getAcrynom()
     {
         return $this->acrynom;
+    }
+
+    /**
+     * Get this Slug of the team.
+     * 
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the Slug of the team.
+     * 
+     * @param string $slug
+     * @return \Garrett9\Stattleship\Team
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        $this->acrynom = strtoupper(substr($slug, strpos($slug, '-') + 1));
+        return $this;
     }
 }

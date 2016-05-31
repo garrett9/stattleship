@@ -132,6 +132,13 @@ class BaseballGameLog extends GameLog
     protected $pitcher_walks;
     
     /**
+     * The number of batters faced as a pitcher.
+     * 
+     * @var number
+     */
+    protected $batters_faced;
+    
+    /**
      * Get the number of at bats for the GameLog.
      *
      * @return number
@@ -522,6 +529,28 @@ class BaseballGameLog extends GameLog
     public function setPitcherWalks($pitcher_walks)
     {
         $this->pitcher_walks = $pitcher_walks;
+        return $this;
+    }
+
+    /**
+     * Get the number of batters faced as a pitcher.
+     * 
+     * @return number
+     */
+    public function getBattersFaced()
+    {
+        return $this->batters_faced;
+    }
+
+    /**
+     * Set the number of batters faced as a pitcher.
+     * 
+     * @param number $batters_faced
+     * @return \Garrett9\Stattleship\Baseball\BaseballGameLog
+     */
+    public function setBattersFaced($batters_faced)
+    {
+        $this->batters_faced = $batters_faced;
         return $this;
     }
 }

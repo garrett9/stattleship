@@ -84,104 +84,8 @@ abstract class StattleshipClient implements IStattleshipClient
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/vnd.stattleship.com; version=1'
             ],
-            'timeout' => 10
+            'timeout' => 30
         ]);
-    }
-
-    /**
-     * Load similar team data to an already instantiated team instance.
-     *
-     * @param Team $team
-     *            The Team instance to load data into.
-     * @param string $id
-     *            The ID of the team.
-     * @param string $nickname
-     *            The nickname of the team.
-     * @param string $location
-     *            The location of the team.
-     */
-    protected function loadTeamData(Team $team, $id, $nickname, $location)
-    {
-        $team->setId($id)
-            ->setNickname($nickname)
-            ->setLocation($location);
-    }
-
-    /**
-     * Load player data into an already instantiated Player instance.
-     *
-     * @param Player $player
-     *            The Player instance to load data into.
-     * @param string $id
-     *            The ID of the player.
-     * @param string $team_id
-     *            The ID of the team the player belongs to.
-     * @param string $first_name
-     *            The first name of the player.
-     * @param string $last_name
-     *            The last name of the player.
-     * @param string $position
-     *            The position the player plays.
-     */
-    protected function loadPlayerData(Player $player, $id, $team_id, $first_name, $last_name, $position)
-    {
-        $player->setId($id)
-            ->setTeamId($team_id)
-            ->setFirstName($first_name)
-            ->setLastName($last_name)
-            ->setPosition($position);
-    }
-
-    /**
-     * Load game data into an already instantiated game instance.
-     *
-     * @param Game $game
-     *            The game instance to load data into.
-     * @param string $id
-     *            The game's ID.
-     * @param string $start_time
-     *            The game's start time.
-     * @param string $status
-     *            The game's status.
-     * @param string $home_id
-     *            The team ID of the home team in the game.
-     * @param string $away_id
-     *            The team ID of the away team in the game.
-     * @param integer $season
-     *            The season of the game is for.
-     */
-    protected function loadGameData(Game $game, $id, $start_time, $status, $home_id, $away_id, $season)
-    {
-        $game->setId($id)
-            ->setStartTimestamp($start_time)
-            ->setStatus($status)
-            ->setHomeId($home_id)
-            ->setAwayId($away_id)
-            ->setSeason($season);
-    }
-
-    /**
-     * Loads GameLog data into an already initialized GameLog record.
-     *
-     * @param GameLog $game_log            
-     * @param string $id
-     *            The ID of the GameLog.
-     * @param string $player_id
-     *            The Player ID of the player who owns the GameLog.
-     * @param string $game_id
-     *            The Game ID the GameLog is for.
-     * @param string $team_id
-     *            The Team ID the team the GameLog was played for.
-     * @param string $opp_id
-     *            The Team ID of the team the GameLog was played against.
-     */
-    protected function loadGameLogData(GameLog $game_log, $id, $player_id, $game_id, $team_id, $opp_id)
-    {
-        $game_log->setId($id)
-            ->setPlayerId($player_id)
-            ->setGameId($game_id)
-            ->setTeamId($team_id)
-            ->setOpponentId($opp_id);
     }
 
     /**
@@ -191,10 +95,10 @@ abstract class StattleshipClient implements IStattleshipClient
      *            The path to perform a GET request for.
      * @return \stdClass The resulting serialized JSON object returned from the request.
      */
-    protected function get($path, array $query_params = [])
+    protected function get($path, array $params = [])
     {
         $response = $this->client->get(ltrim($path, '/'), [
-            'query' => $query_params
+            'query' => $params
         ]);
         return json_decode($response->getBody());
     }
@@ -222,7 +126,7 @@ abstract class StattleshipClient implements IStattleshipClient
      * @param number $season            
      * @return \Garrett9\Stattleship\Game
      */
-    protected abstract function createGameFromData(\stdClass $data, $season);
+    protected abstract function createGameFromData(\stdClass $data);
 
     /**
      * Create a new GameLog instance from the given data.
@@ -246,7 +150,11 @@ abstract class StattleshipClient implements IStattleshipClient
             'per_page' => $per_page
         ]);
         foreach ($data->teams as $team)
-            $teams[] = $this->createTeamFromData($team);
+            $teams[] = $this->createTeamFromData($team)
+                ->setId($team->id)
+                ->setNickname($team->nickname)
+                ->setLocation($team->location)
+                ->setSlug($team->slug);
         return $teams;
     }
 
@@ -284,7 +192,41 @@ abstract class StattleshipClient implements IStattleshipClient
             'per_page' => $per_page
         ]);
         foreach ($data->players as $player)
-            $players[] = $this->createPlayerFromData($player);
+            $players[] = $this->createPlayerFromData($player)
+                ->setId($player->id)
+                ->setTeamId($player->team_id)
+                ->setFirstName($player->first_name)
+                ->setLastName($player->last_name)
+                ->setPosition($player->position_abbreviation)
+                ->setSlug($player->slug);
+        
+        return $players;
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Garrett9\Stattleship\IStattleshipClient::getActivePlayers()
+     */
+    public function getActivePlayers($page = 1, $per_page = 40)
+    {
+        $players = [];
+        $data = $this->get('players', [
+            'page' => $page,
+            'per_page' => $per_page
+        ]);
+        foreach ($data->players as $player) {
+            if ($player->active)
+                $players[] = $this->createPlayerFromData($player)
+                    ->setId($player->id)
+                    ->setTeamId($player->team_id)
+                    ->setFirstName($player->first_name)
+                    ->setLastName($player->last_name)
+                    ->setPosition($player->position_abbreviation)
+                    ->setSlug($player->slug);
+        }
+        
         return $players;
     }
 
@@ -309,6 +251,43 @@ abstract class StattleshipClient implements IStattleshipClient
     }
 
     /**
+     * 
+     * {@inheritDoc}
+     * @see \Garrett9\Stattleship\IStattleshipClient::getAllActivePlayers()
+     */
+    public function getAllActivePlayers()
+    {
+        $all_players = [];
+        $page = 1;
+        while (true) {
+            $players = $this->getActivePlayers($page);
+            if (count($players) <= 0)
+                break;
+            $page ++;
+            $all_players = array_merge($all_players, $players);
+        }
+        return $all_players;
+    }
+    
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Garrett9\Stattleship\IStattleshipClient::getGame()
+     */
+    public function getGame($slug)
+    {
+        $data = $this->get('games/' . $slug);
+        return $this->createGameFromData($data->game)
+            ->setSeason(str_replace('mlb-', '', $data->seasons[0]->slug))
+            ->setId($data->game->id)
+            ->setStartTimestamp($data->game->timestamp)
+            ->setStatus($data->game->status)
+            ->setSlug($data->game->slug)
+            ->setHomeId($data->game->home_team_id)
+            ->setAwayId($data->game->away_team_id);
+    }
+
+    /**
      *
      * {@inheritDoc}
      *
@@ -322,7 +301,14 @@ abstract class StattleshipClient implements IStattleshipClient
             'per_page' => $per_page
         ]);
         foreach ($data->games as $game)
-            $games[] = $this->createGameFromData($game, str_replace('mlb-', '', $data->seasons[0]->slug));
+            $games[] = $this->createGameFromData($game)
+                ->setId($game->id)
+                ->setStartTimestamp($game->timestamp)
+                ->setStatus($game->status)
+                ->setHomeId($game->home_team_id)
+                ->setAwayId($game->away_team_id)
+                ->setSeason(str_replace('mlb-', '', $data->seasons[0]->slug))
+                ->setSlug($game->slug);
         return $games;
     }
 
@@ -352,19 +338,19 @@ abstract class StattleshipClient implements IStattleshipClient
      *
      * @see \Garrett9\Stattleship\IStattleshipClient::getGameLogs()
      */
-    public function getGameLogs($page = 1, $per_page = 40, $status = null)
+    public function getGameLogs($page = 1, $per_page = 40, array $params = [])
     {
-        $params = [
-            'page' => $page,
-            'per_page' => $per_page
-        ];
-        if (! is_null($status))
-            $params['status'] = $status;
-        
+        $params['page'] = $page;
+        $params['per_page'] = $per_page;
         $game_logs = [];
         $data = $this->get('game_logs', $params);
         foreach ($data->game_logs as $game_log)
-            $game_logs[] = $this->createGameLogFromData($game_log);
+            $game_logs[] = $this->createGameLogFromData($game_log)
+                ->setId($game_log->id)
+                ->setGameId($game_log->game_id)
+                ->setPlayerId($game_log->player_id)
+                ->setTeamId($game_log->team_id)
+                ->setOpponentId($game_log->opponent_id);
         return $game_logs;
     }
 
@@ -374,12 +360,12 @@ abstract class StattleshipClient implements IStattleshipClient
      *
      * @see \Garrett9\Stattleship\IStattleshipClient::getAllGameLogs()
      */
-    public function getAllGameLogs($status = null)
+    public function getAllGameLogs(array $params = [])
     {
         $all_game_logs = [];
         $page = 1;
         while (true) {
-            $game_logs = $this->getGameLogs($page, 40, $status);
+            $game_logs = $this->getGameLogs($page, 40, $params);
             if (count($game_logs) <= 0)
                 break;
             $page ++;
@@ -394,9 +380,10 @@ abstract class StattleshipClient implements IStattleshipClient
      *
      * @see \Garrett9\Stattleship\IStattleshipClient::getAllInProgressGameLogs()
      */
-    public function getAllInProgressGameLogs()
+    public function getAllInProgressGameLogs(array $params = [])
     {
-        return $this->getAllGameLogs(self::GAME_IN_PROGRESS);
+        $params['status'] = self::GAME_IN_PROGRESS;
+        return $this->getAllGameLogs($params);
     }
 
     /**
@@ -405,9 +392,22 @@ abstract class StattleshipClient implements IStattleshipClient
      *
      * @see \Garrett9\Stattleship\IStattleshipClient::getAllEndedGameLogs()
      */
-    public function getAllEndedGameLogs()
+    public function getAllEndedGameLogs(array $params = [])
     {
-        return $this->getAllGameLogs(self::GAME_ENDED);
+        $params['status'] = self::GAME_ENDED;
+        return $this->getAllGameLogs($params);
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \Garrett9\Stattleship\IStattleshipClient::getAllGameLogsForGame()
+     */
+    public function getAllGameLogsForGame($game_slug, array $params = [])
+    {
+        $params['game_id'] = $game_slug;
+        return $this->getAllGameLogs($params);
     }
 
     /**

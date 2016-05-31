@@ -51,6 +51,25 @@ class Game
      * @var integer
      */
     protected $season;
+    
+    /**
+     * The Slug of the Game.
+     * 
+     * @var string
+     */
+    protected $slug;
+    
+    /**
+     * The GameLogs for this game instance.
+     * 
+     * @var array
+     */
+    protected $game_logs;
+    
+    public function __construct()
+    {
+        $this->game_logs = [];
+    }
 
     /**
      * Get the ID of the game.
@@ -183,5 +202,47 @@ class Game
         $this->season = $season;
         return $this;
     }
+
+    /**
+     * Get the Slug of the game.
+     * 
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set the Slug of the game.
+     * 
+     * @param unknown $slug
+     * @return \Garrett9\Stattleship\Game
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
     
+    /**
+     * Get the GameLogs for this game.
+     * 
+     * @return \Garrett9\Stattleship\Game[]
+     */
+    public function getGameLogs()
+    {
+        return $this->game_logs;
+    }
+    
+    /**
+     * Add a new game log to the list of the game's game logs.
+     * 
+     * @param GameLog $game_log The game log to add.
+     * @return \Garrett9\Stattleship\Game
+     */
+    public function addGameLog(GameLog $game_log)
+    {
+        $this->game_logs[] = $game_log;
+    }
 }

@@ -44,7 +44,7 @@ class GameLog
      * @var string
      */
     protected $opponent_id;
-
+    
     /**
      * Get the ID of the GameLog.
      * 

@@ -20,9 +20,7 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
      */
     protected function createTeamFromData(\stdClass $data)
     {
-        $team = new BaseballTeam();
-        $this->loadTeamData($team, $data->id, $data->nickname, $data->location);
-        return $team;
+        return new BaseballTeam();
     }
 
     /**
@@ -33,9 +31,7 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
      */
     protected function createPlayerFromData(\stdClass $data)
     {
-        $player = new BaseballPlayer();
-        $this->loadPlayerData($player, $data->id, $data->team_id, $data->first_name, $data->last_name, $data->position_abbreviation);
-        return $player;
+        return new BaseballPlayer();
     }
 
     /**
@@ -44,11 +40,9 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
      *
      * @see \Garrett9\Stattleship\StattleshipClient::createGameFromData()
      */
-    protected function createGameFromData(\stdClass $data, $season)
+    protected function createGameFromData(\stdClass $data)
     {
-        $game = new BaseballGame();
-        $this->loadGameData($game, $data->id, $data->timestamp, $data->status, $data->home_team_id, $data->away_team_id, $season);
-        return $game;
+        return new BaseballGame();
     }
 
     /**
@@ -59,9 +53,7 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
      */
     protected function createGameLogFromData(\stdClass $data)
     {
-        $game_log = new BaseballGameLog();
-        $this->loadGameLogData($game_log, $data->id, $data->player_id, $data->game_id, $data->team_id, $data->opponent_id);
-        $game_log->setAtBats($data->at_bats)
+        return (new BaseballGameLog())->setAtBats($data->at_bats)
             ->setHitByPitch($data->hit_by_pitch)
             ->setWalks($data->walks)
             ->setHits($data->hits)
@@ -77,7 +69,7 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
             ->setPitcherEarnedRuns($data->pitcher_earned_runs)
             ->setPitcherHits($data->pitcher_hits)
             ->setPitcherStrikeouts($data->pitcher_strikeouts)
-            ->setPitcherWalks($data->pitcher_walks);
-        return $game_log;
+            ->setPitcherWalks($data->pitcher_walks)
+            ->setBattersFaced($data->batters_faced);
     }
 }
