@@ -16,4 +16,11 @@ interface IStattleshipClientFactory
      * @return \Garrett9\Stattleship\Baseball\BaseballStattleshipClient
      */
     public function createBaseballClient();
+    
+    /**
+     * Create a new FootballStattleshipClient.
+     * 
+     * @return \Garrett9\Stattleship\Football\FootballStattleshipClient
+     */
+    public function createFootballClient();
 }

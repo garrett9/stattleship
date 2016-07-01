@@ -71,16 +71,18 @@ interface IStattleshipClient
      * 
      * @param $page The page of results to retrieve.
      * @param $per_page The number of results to retrieve per page.
+     * @param array $params Extra parameters to add to the query.
      * @return array An array of the results.
      */
-    public function getGames($page = 1, $per_page = 40);
+    public function getGames($page = 1, $per_page = 40, array $params = []);
     
     /**
      * Get all games in the API.
      * 
+     * @param array $params Extra parameters to add to the query.
      * @return array An array of the results.
      */
-    public function getAllGames();
+    public function getAllGames(array $params = []);
     
     /**
      * Get the game logs from the API.
@@ -124,6 +126,49 @@ interface IStattleshipClient
      * @return \Garrett9\Stattleship\GameLog[]
      */
     public function getAllGameLogsForGame($game_slug, array $params = []);
+    
+    /**
+     * Get the team game logs from the API.
+     * 
+     * @param number $page The page of results to retrieve.
+     * @param number $per_page The number of results to retrieve per page.
+     * @param array $params Extra parameters to add to the query.
+     * @return \Garrett9\Stattleship\TeamGameLog[]
+     */
+    public function getTeamGameLogs($page = 1, $per_page = 40, array $params = []);
+    
+    /**
+     * Get all team game logs from the API.
+     * 
+     * @param array $params Extra parameters to add to the query.
+     * @return \Garrett9\Stattleship\TeamGameLog[]
+     */
+    public function getAllTeamGameLogs(array $params = []);
+    
+    /**
+     * Get all team game logs from the API for a given game's slug.
+     * 
+     * @param string $game_slug The slug to retrieve the Game Logs for.
+     * @param array $params Extra parameters to add to the query.
+     * @return \Garrett9\Stattleship\TeamGameLog[]
+     */
+    public function getAllTeamGameLogsForGame($game_slug, array $params = []);
+    
+    /**
+     * Get all team game logs that are currently in progress.
+     * 
+     * @param array $params Extra parameters to add to the query.
+     * @return \Garrett9\Stattleship\TeamGameLog[]
+     */
+    public function getAllInProgressTeamGameLogs(array $params = []);
+    
+    /**
+     * Get all team game logs that have ended.
+     * 
+     * @param array $params Extra parameters to add to the query.
+     * @return \Garrett9\Stattleship\TeamGameLog[]
+     */
+    public function getAllEndedTeamGameLogs(array $params = []);
     
     /**
      * Returns the URL used for making API requests to Strattleship.

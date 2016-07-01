@@ -3,6 +3,7 @@
 namespace Garrett9\Stattleship;
 
 use Garrett9\Stattleship\Baseball\BaseballStattleshipClient;
+use Garrett9\Stattleship\Football\FootballStattleshipClient;
 /**
  * A factory class for creating new StattleshipClients.
  * 
@@ -36,5 +37,15 @@ class StattleshipClientFactory implements IStattleshipClientFactory
     public function createBaseballClient()
     {
         return new BaseballStattleshipClient($this->key); 
+    }
+
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Garrett9\Stattleship\IStattleshipClientFactory::createFootballClient()
+     */
+    public function createFootballClient()
+    {
+        return new FootballStattleshipClient($this->key);
     }
 }

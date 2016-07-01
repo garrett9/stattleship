@@ -8,6 +8,8 @@ use Garrett9\Stattleship\Baseball\IBaseballStattleshipClient;
 use Garrett9\Stattleship\Baseball\BaseballStattleshipClient;
 use Garrett9\Stattleship\IStattleshipClientFactory;
 use Garrett9\Stattleship\StattleshipClientFactory;
+use Garrett9\Stattleship\Football\IFootballStattleshipClient;
+use Garrett9\Stattleship\Football\FootballStattleshipClient;
 
 /**
  * A provider for registering the resources from the Strattleship Plugin.
@@ -39,6 +41,11 @@ class StattleshipProvider extends ServiceProvider
         $this->app->bind(IBaseballStattleshipClient::class, function($app) {
             $config = $app->make(Repository::class);
             return new BaseballStattleshipClient($config->get('stattleship.access_token')); 
+        });
+        
+        $this->app->bind(IFootballStattleshipClient::class, function($app) {
+            $config = $app->make(Repository::class);
+            return new FootballStattleshipClient($config->get('stattleship.access_token'));
         });
         
         $this->app->bind(IStattleshipClientFactory::class, function($app) {

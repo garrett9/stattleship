@@ -4,7 +4,7 @@ namespace Garrett9\Stattleship\Baseball;
 use Garrett9\Stattleship\StattleshipClient;
 
 /**
- * A client for interacting with the Baseball
+ * A client for interacting with the Baseball endpoints of stattleship.
  *
  * @author garrettshevach@gmail.com
  *        
@@ -71,5 +71,15 @@ class BaseballStattleshipClient extends StattleshipClient implements IBaseballSt
             ->setPitcherStrikeouts($data->pitcher_strikeouts)
             ->setPitcherWalks($data->pitcher_walks)
             ->setBattersFaced($data->batters_faced);
+    }
+    
+    /**
+     * 
+     * {@inheritDoc}
+     * @see \Garrett9\Stattleship\StattleshipClient::createTeamGameLogFromData()
+     */
+    protected function createTeamGameLogFromData(\stdClass $data)
+    {
+        return new BaseballTeamGameLog();
     }
 }
