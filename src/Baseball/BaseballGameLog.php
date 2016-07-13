@@ -137,7 +137,7 @@ class BaseballGameLog extends GameLog
      * @var number
      */
     protected $batters_faced;
-    
+
     /**
      * Get the number of at bats for the GameLog.
      *
@@ -156,7 +156,7 @@ class BaseballGameLog extends GameLog
      */
     public function setAtBats($at_bats)
     {
-        $this->at_bats = $at_bats;
+        $this->at_bats = floatval($at_bats);
         return $this;
     }
     
@@ -188,7 +188,7 @@ class BaseballGameLog extends GameLog
      */
     public function setHitByPitch($hit_by_pitch)
     {
-        $this->hit_by_pitch = $hit_by_pitch;
+        $this->hit_by_pitch = floatval($hit_by_pitch);
         return $this;
     }
 
@@ -210,7 +210,7 @@ class BaseballGameLog extends GameLog
      */
     public function setWalks($walks)
     {
-        $this->walks = $walks;
+        $this->walks = floatval($walks);
         return $this;
     }
 
@@ -232,7 +232,7 @@ class BaseballGameLog extends GameLog
      */
     public function setHits($hits)
     {
-        $this->hits = $hits;
+        $this->hits = floatval($hits);
         return $this;
     }
 
@@ -264,7 +264,7 @@ class BaseballGameLog extends GameLog
      */
     public function setDoubles($doubles)
     {
-        $this->doubles = $doubles;
+        $this->doubles = floatval($doubles);
         return $this;
     }
 
@@ -286,7 +286,7 @@ class BaseballGameLog extends GameLog
      */
     public function setTriples($triples)
     {
-        $this->triples = $triples;
+        $this->triples = floatval($triples);
         return $this;
     }
 
@@ -308,7 +308,7 @@ class BaseballGameLog extends GameLog
      */
     public function setHomeRuns($home_runs)
     {
-        $this->home_runs = $home_runs;
+        $this->home_runs = floatval($home_runs);
         return $this;
     }
 
@@ -330,7 +330,7 @@ class BaseballGameLog extends GameLog
      */
     public function setRuns($runs)
     {
-        $this->runs = $runs;
+        $this->runs = floatval($runs);
         return $this;
     }
 
@@ -352,7 +352,7 @@ class BaseballGameLog extends GameLog
      */
     public function setRunsBattedIn($runs_batted_in)
     {
-        $this->runs_batted_in = $runs_batted_in;
+        $this->runs_batted_in = floatval($runs_batted_in);
         return $this;
     }
 
@@ -374,7 +374,7 @@ class BaseballGameLog extends GameLog
      */
     public function setStolenBases($stolen_bases)
     {
-        $this->stolen_bases = $stolen_bases;
+        $this->stolen_bases = floatval($stolen_bases);
         return $this;
     }
 
@@ -396,7 +396,7 @@ class BaseballGameLog extends GameLog
      */
     public function setStrikeouts($strikeouts)
     {
-        $this->strikeouts = $strikeouts;
+        $this->strikeouts = floatval($strikeouts);
         return $this;
     }
 
@@ -418,7 +418,7 @@ class BaseballGameLog extends GameLog
      */
     public function setWins($wins)
     {
-        $this->wins = $wins;
+        $this->wins = intval($wins);
         return $this;
     }
 
@@ -440,7 +440,7 @@ class BaseballGameLog extends GameLog
      */
     public function setInningsPitched($innings_pitched)
     {
-        $this->innings_pitched = $innings_pitched;
+        $this->innings_pitched = floatval($innings_pitched);
         return $this;
     }
 
@@ -462,7 +462,7 @@ class BaseballGameLog extends GameLog
      */
     public function setPitcherEarnedRuns($pitcher_earned_runs)
     {
-        $this->pitcher_earned_runs = $pitcher_earned_runs;
+        $this->pitcher_earned_runs = floatval($pitcher_earned_runs);
         return $this;
     }
 
@@ -484,7 +484,7 @@ class BaseballGameLog extends GameLog
      */
     public function setPitcherHits($pitcher_hits)
     {
-        $this->pitcher_hits = $pitcher_hits;
+        $this->pitcher_hits = floatval($pitcher_hits);
         return $this;
     }
 
@@ -506,7 +506,7 @@ class BaseballGameLog extends GameLog
      */
     public function setPitcherStrikeouts($pitcher_strikeouts)
     {
-        $this->pitcher_strikeouts = $pitcher_strikeouts;
+        $this->pitcher_strikeouts = floatval($pitcher_strikeouts);
         return $this;
     }
 
@@ -528,7 +528,7 @@ class BaseballGameLog extends GameLog
      */
     public function setPitcherWalks($pitcher_walks)
     {
-        $this->pitcher_walks = $pitcher_walks;
+        $this->pitcher_walks = floatval($pitcher_walks);
         return $this;
     }
 
@@ -550,7 +550,7 @@ class BaseballGameLog extends GameLog
      */
     public function setBattersFaced($batters_faced)
     {
-        $this->batters_faced = $batters_faced;
+        $this->batters_faced = floatval($batters_faced);
         return $this;
     }
 }

@@ -123,7 +123,6 @@ class FootballGameLog extends GameLog
      */
     protected $safeties;
 
-
     /**
      * Get the number of rushing yards for the game log.
      * 
