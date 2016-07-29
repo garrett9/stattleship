@@ -418,7 +418,7 @@ class BaseballGameLog extends GameLog
      */
     public function setWins($wins)
     {
-        $this->wins = intval($wins);
+        $this->wins = boolval($wins);
         return $this;
     }
 

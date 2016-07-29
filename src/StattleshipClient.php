@@ -88,7 +88,7 @@ abstract class StattleshipClient implements IStattleshipClient
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/vnd.stattleship.com; version=1'
             ],
-            'timeout' => 30
+            'timeout' => 60
         ]);
     }
 
